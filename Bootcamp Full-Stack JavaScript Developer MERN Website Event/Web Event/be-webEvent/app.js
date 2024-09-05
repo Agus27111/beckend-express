@@ -8,6 +8,9 @@ const app = express();
 // import router categories
 const categoriesRouter = require('./app/api/v1/categories/router');
 const multerRouter = require('./app/api/v1/images/router');
+const talentsRouter = require('./app/api/v1/talents/router');
+const eventsRouter = require('./app/api/v1/events/router');
+
 
 // middlewares
 const notFoundMiddleware = require('./app/middlewares/not-found');
@@ -32,6 +35,10 @@ app.get('/', (req, res) => {
 // gunakan categories router
 app.use(v1, categoriesRouter);
 app.use(v1, multerRouter);
+app.use(v1, talentsRouter);
+app.use(v1, eventsRouter);
+
+
 
 // middlewares
 app.use(notFoundMiddleware);
