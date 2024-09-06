@@ -1,6 +1,4 @@
-const {
-    createOrganizer,
-  } = require('../../../services/mongoose/users');
+const {createOrganizer, createUser} = require('../../../services/mongoose/users');
   
   const { StatusCodes } = require('http-status-codes');
   
@@ -15,8 +13,20 @@ const {
       next(err);
     }
   };
+  const createCMSUser = async (req, res, next) => {
+    try {
+      const result = await createUser(req);
+  
+      res.status(StatusCodes.CREATED).json({
+        data: result,
+      });
+    } catch (err) {
+      next(err);
+    }
+  };
   
   
   module.exports = {
     createCMSOrganizer,
+    createCMSUser
   };

@@ -8,7 +8,6 @@ const {
   
   const { StatusCodes } = require('http-status-codes');
   
-  console.log(getAllTalents);
   const create = async (req, res, next) => {
     try {
       const result = await createTalents(req);

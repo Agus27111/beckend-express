@@ -9,7 +9,7 @@ const signin = async (req) => {
         throw new BadRequestError('Please provide email and password');
     }
 
-    const result = await Users.findOne({email: email});
+    const result = await Users.findOne({email});
 
     if(!result) {
         throw new UnauthorizedError('Invalid Credentials');
@@ -17,7 +17,7 @@ const signin = async (req) => {
 
     const checkPassword = await result.comparePassword(password);
     if(!checkPassword) {
-        throw new UnauthorizedError('Invalid Credentials');
+        throw new UnauthorizedError('passwordmu salah');
     }
 
     const token = createJWT({payload: createTokenUser(result)});
