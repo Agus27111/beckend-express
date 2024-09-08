@@ -1,24 +1,23 @@
 const mongoose = require('mongoose');
-const { model, Schema } = mongoose;
 const bcrypt = require('bcryptjs');
 
-const  userSchema = Schema(
+const userSchema = new mongoose.Schema(
   {
     name: {
-        type: String,
-        required: [true, 'Nama wajib diisi'],
-        minlength: [3, 'Panjang nama minimal 3 karakter'],
-        maxlength: [50, 'Panjang nama maksimal 20 karakter'],
+      type: String,
+      required: [true, 'Nama harus diisi'],
+      minlength: 3,
+      maxlength: 50,
     },
     email: {
       type: String,
-      required: [true, 'Email wajib diisi'],
       unique: true,
+      required: [true, 'Email harus diisi'],
     },
     password: {
       type: String,
-      required: [true, 'Password wajib diisi'],
-      minlength: [6, 'Panjang password minimal 6 karakter'],
+      required: [true, 'Password harus diisi'],
+      minlength: 6,
     },
     role: {
       type: String,
@@ -27,7 +26,7 @@ const  userSchema = Schema(
     },
     organizer: {
       type: mongoose.Types.ObjectId,
-      ref: 'organizer',
+      ref: 'Organizer',
       required: true,
     },
   },
@@ -35,17 +34,16 @@ const  userSchema = Schema(
 );
 
 userSchema.pre('save', async function (next) {
-    const User = this;
-    if (User.isModified('password')) {
-        User.password = await bcrypt.hash(User.password, 10);
-    };
-    next();
+  const User = this;
+  if (User.isModified('password')) {
+    User.password = await bcrypt.hash(User.password, 12);
+  }
+  next();
 });
 
-userSchema.methods.comparePassword = async function (candidatePassword) {
-    const isMatch = await bcrypt.compare(candidatePassword, this.password);
-    return isMatch;
-}   
+userSchema.methods.comparePassword = async function (canditatePassword) {
+  const isMatch = await bcrypt.compare(canditatePassword, this.password);
+  return isMatch;
+};
 
-
-module.exports = model('user', userSchema);
+module.exports = mongoose.model('User', userSchema);

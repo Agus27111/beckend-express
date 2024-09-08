@@ -11,12 +11,11 @@ let categorySchema = Schema(
     },
     organizer: {
       type: mongoose.Types.ObjectId,
-      ref: 'organizer',
+      ref: 'Organizer',
       required: true,
+    },
   },
-},
   { timestamps: true }
-
 );
 
 module.exports = model('Category', categorySchema);
