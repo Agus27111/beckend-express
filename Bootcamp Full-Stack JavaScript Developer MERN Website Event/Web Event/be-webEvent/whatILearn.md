@@ -149,8 +149,8 @@ npm i http-status-codes
 
 * buat services categories
 
-1. service ini akan menyimpan segala code logika yang dibutuhkan di dalam controller sehinmgga harapannya controller terlihat lebih bersih dan juga mudah untuk di maintanance
-2. buat folder services di dalam folder app dan lanjutkan dengan folder mongoose (ORM untuk mongoDB) dan buat logika secara khususu untuyk setiap tabel. {*perhatikan kode dalam aplikasi di folder ini*}
+1. service ini akan menyimpan segala code logika yang dibutuhkan di dalam controller sehingga harapannya controller terlihat lebih bersih dan juga mudah untuk di maintanance
+2. buat folder services di dalam folder app dan lanjutkan dengan folder mongoose (ORM untuk mongoDB) dan buat logika secara khusus untuk setiap tabel. {*perhatikan kode dalam aplikasi di folder ini*}
 3. kemudian gunakan kode sewrvices ini pada controller kita
 4. cek di POSTMAN
 
@@ -160,16 +160,15 @@ npm i http-status-codes
 
 Buatlah API untuk setiap tabel sesuai dengan kebutuhan aplikasi kita.
 
-
 1. siapkan bcrypt untuk hash password
    i*ni kita gunakan sesuai kebutuhan saat login(compare) atau signup(hash)*
-   *contoh penggunaan ada pada model dari partricipants, users*
+   *contoh penggunaan ada pada model dari partricipants, users.*
 2. siapkan jwt untuk menyimpan webtoken kita, setting jwt bisa diliat dalam utils dan digunakan dalam services auth , participants
-   auth services digunakan oleh api auth(signin)) dan juga auth middleware
+   auth services digunakan oleh api auth(signin) dan juga auth middleware. JWT kita gunakan sebagai middleware tambahan untuk masuk ke API kita sehingga sesuai dengan flow aplikasi kita, misalnya admin hanya bisa melihat ticket yang terjual tetapi tidak bisa membuat events baru.
 
-*catatan:* 
+*catatan:*
 
 * untuk upload file gunakan npm multer, cek di middleweare multer dan penggunaannya pada tabel Image
 * untuk kirim no OTP ke email user kita bisa gunakan npm nodemailer
   *lihat setting nya di services/ mail*
-  membutuhkan folder views untuk menangani HTML yang akan dikirm ke email user
+  *membutuhkan folder views untuk menangani HTML yang akan dikirm ke email user*
