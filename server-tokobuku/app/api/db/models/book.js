@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Books.init({
+  Book.init({
     category: DataTypes.INTEGER,
     user: DataTypes.INTEGER,
     title: DataTypes.STRING,

@@ -1,11 +1,12 @@
 'use strict';
 const bcrypt = require('bcryptjs')
+require('dotenv').config()
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 
   async up (queryInterface, Sequelize) {
-    const hashPassword = await bcrypt.hash('rahasia', 10)
+    const hashPassword = await bcrypt.hash(process.env.JWT_SECRET, 10)
       await queryInterface.bulkInsert('Users', [ {
         id: 1,
         name: "admin1",

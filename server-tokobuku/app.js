@@ -5,6 +5,7 @@ const logger = require('morgan');
 
 //route
 const categoriesRouter = require('./app/api/v1/categories/router');
+const authRouter = require('./app/api/v1/auth/router');
 
 const app = express();
 const URL = '/api/v1'
@@ -20,5 +21,6 @@ app.get('/', (req, res) => {
 });
 
 app.use(`${URL}/auth`, categoriesRouter);
+app.use(`${URL}/auth`, authRouter);
 
 module.exports = app;
