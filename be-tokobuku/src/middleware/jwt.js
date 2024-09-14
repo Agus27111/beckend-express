@@ -8,7 +8,7 @@ const generateAccessToken = (user) => {
 };
 
 const generateRefreshToken = (user) => {
-  return JsonWebToken.sign(user, process.env.JWT_REFRESH_SCRET, {
+  return JsonWebToken.sign(user, process.env.JWT_REFRESH_SECRET, {
     expiresIn: process.env.JWT_REFRESH_EXPIRES_IN || "86400s",
   });
 };

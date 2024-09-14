@@ -4,46 +4,57 @@ const { generateAccessToken, generateRefreshToken, verifyRefreshToken, parseJwt,
 const joiValidation = require('../../middleware/joi')
 
 
-    const signin = async (req, res, next) => {
-        try {
-            const { email, password } = req.body;
+const signin = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
 
-            const { error } = joiValidation.signinValidation.validate({
-                email,
-                password,
-              });
-              if (error) {
-                error.isJoi = true; // Tandai error sebagai Joi error
-                return next(error); // Forward error ke middleware
-              }
+        const { error } = joiValidation.signinValidation.validate({
+            email,
+            password,
+        });
         
-
-            const user =await UserModel.findOne({where:{email}})
-
-            if(!user) throw new Error('User not found')
-
-            const isMatch = compare(password, user.password);
-
-            if(!isMatch) throw new Error('Password not match')
-
-            const accessToken = generateAccessToken({id: user.id, role: user.role,  email: user.email});
-
-            const refreshToken = generateRefreshToken({
-                id: user.id,
-                name: user.name,
-                email: user.email,
-            });
-
-            res.status(200).json({
-                message: 'Signin successful',
-                accessToken,
-                refreshToken,
-            });
-
-        } catch (error) {
-            next(error)
+        if (error) {
+            error.isJoi = true; 
+            return next(error); 
         }
+
+        const user = await UserModel.findOne({ where: { email } });
+        if (!user) {
+            const err = new Error('User not found');
+            err.statusCode = 404; 
+            return next(err); 
+        }
+
+        const isMatch = compare(password, user.password);
+        if (!isMatch) {
+            const err = new Error('Password not match');
+            err.statusCode = 401; 
+            return next(err); 
+        }
+
+        const accessToken = generateAccessToken({
+            id: user.id,
+            role: user.role,
+            email: user.email,
+        });
+
+        const refreshToken = generateRefreshToken({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+        });
+
+        res.status(200).json({
+            message: 'Signin successful',
+            accessToken,
+            refreshToken,
+        });
+    } catch (error) {
+        console.error('Error during signin:', error); // Tambahkan log error
+        next(error);
     }
+};
+
 
     const signup = async (req, res, next) => {
         try {
