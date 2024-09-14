@@ -4,6 +4,7 @@ require('dotenv').config();
 const generateAccessToken = (user) => {
   return JsonWebToken.sign(user, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN || "1800s",
+
   });
 };
 
@@ -15,7 +16,7 @@ const generateRefreshToken = (user) => {
 
 function verifyRefreshToken(token) {
   try {
-    return JsonWebToken.verify(token, process.env.JWT_REFRESH_SCRET);
+    return JsonWebToken.verify(token, process.env.JWT_REFRESH_SECRET);
   } catch (err) {
     return null;
   }

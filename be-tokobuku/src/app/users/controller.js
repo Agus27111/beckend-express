@@ -41,6 +41,7 @@ const signin = async (req, res, next) => {
         const refreshToken = generateRefreshToken({
             id: user.id,
             name: user.name,
+            role: user.role,
             email: user.email,
         });
 

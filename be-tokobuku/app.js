@@ -6,9 +6,14 @@ require('dotenv').config()
 const app = express()
 const PORT = process.env.PORT || 3000
 
+require('./src/db')
 //route
 const userRouter = require('./src/app/users/router')
+const categoriesRouter = require('./src/app/categories/router')
+const booksRouter = require('./src/app/books/router')
+
 const errorHandler = require('./src/middleware/errorHandler')
+
 
 const url = '/api/v1'
 
@@ -22,8 +27,10 @@ app.get('/', (req, res) => {
 });
 
 app.use(url, userRouter)
+app.use(url, categoriesRouter)
+app.use(url, booksRouter)
 
-
+//handle Error
 app.use(errorHandler)
 
 app.listen(PORT, () => console.log(`server running on port ${PORT}`))
