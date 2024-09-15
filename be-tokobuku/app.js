@@ -6,7 +6,7 @@ require('dotenv').config()
 const app = express()
 const PORT = process.env.PORT || 3000
 
-require('./src/db')
+require('./src/db/associations')
 //route
 const userRouter = require('./src/app/users/router')
 const categoriesRouter = require('./src/app/categories/router')

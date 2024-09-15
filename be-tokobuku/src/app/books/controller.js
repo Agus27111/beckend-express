@@ -1,9 +1,28 @@
 const BookModel = require('./model');
+const CategoryModel = require('../categories/model');
+const { Op } = require('sequelize');
 
 const getAllBooks = async (req, res, next) => {
     try {
-        console.log(req.user)
-        const books = await BookModel.findAll()
+        const {keywords = ''} = req.query;
+       
+        let condition = {
+            userId: req.user.id
+        }
+
+        if(keywords !== '') {
+            condition = {
+                ...condition,
+                title: {
+                    [Op.like]: `%${keywords}%`
+                }
+            }
+        }
+        
+        const books = await BookModel.findAll({where: condition, include: {
+            model: CategoryModel,
+            as: 'category',
+        } });
         res.status(201).json({
             message: 'Get books successful',
             data: books
