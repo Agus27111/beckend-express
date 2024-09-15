@@ -17,6 +17,11 @@ db.authenticate()
         console.error('Unable to connect to the database:', err);
     });
 
-    db.sync({ alter: true, force: false });
+    db.sync({ alter: true, force: false })
+    .then(() => {
+      console.log('Database sync completed.');
+      require('./associations'); 
+    });
+  
 
     module.exports = db

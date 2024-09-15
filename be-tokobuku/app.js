@@ -11,6 +11,7 @@ require('./src/db/associations')
 const userRouter = require('./src/app/users/router')
 const categoriesRouter = require('./src/app/categories/router')
 const booksRouter = require('./src/app/books/router')
+const uploadsRouter = require('./src/app/uploads/router')
 
 const errorHandler = require('./src/middleware/errorHandler')
 
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 app.use(url, userRouter)
 app.use(url, categoriesRouter)
 app.use(url, booksRouter)
+app.use(url, uploadsRouter)
 
 //handle Error
 app.use(errorHandler)

@@ -36,9 +36,11 @@ const createBook = async (req, res, next) => {
     try {
         const { title, author, image, publishedDate, price, stock, categoryId } = req.body;
         const userId = req.user.id; 
+
+        const checkCategory = await CategoryModel.findOne({ where: { id: categoryId, userId: userId } });
         
-        if (!userId) {
-            return res.status(401).json({ message: 'Please log in first.' });
+        if (!checkCategory) {
+            return res.status(401).json({ message: 'Id category not found' });
         }
         
         if (req.user.role !== 'admin') {
@@ -64,63 +66,77 @@ const createBook = async (req, res, next) => {
         next(error);
     }
 };
-
-
-
 const updateBook = async (req, res, next) => {
     try {
+        console.log('Before fetching book');
         const { id } = req.params;
-        const { name } = req.body;
+        const { title, author, image, publishedDate, price, stock, categoryId } = req.body;
+        const userId = req.user.id;
 
-        const books = await BookModel.findOne({ where: { id, userId: req.user.id } });
+        const bookId = await BookModel.findOne({ where: { id: id } });
+        
+        if (!bookId) {
 
-        if(!books) throw new Error ('books not found')
+            return res.status(404).json({ message: 'Book not found' });
+        }
 
-        const updatebooks = await books.update({ name });
+        const checkCategory = await CategoryModel.findOne({ where: { id: categoryId, userId: userId } });
+       
+        if (!checkCategory) {
+            return res.status(404).json({ message: 'Category not found' });
+        }
+
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'You are not authorized to update books.' });
+        }
+
+        await bookId.update({
+            title,
+            author,
+            image,
+            publishedDate,
+            price,
+            stock,
+            categoryId, 
+        });
 
         res.status(200).json({
-            message: 'Update books successful',
-            data: updatebooks
+            message: 'Book updated successfully',
+            data: bookId
         });
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
+
+
 
 const deleteBook = async (req, res, next) => {
     try {
-        const { id } = req.params;
+        const userId = req.user.id;  
+        const { id } = req.params;  
 
-        const booksById = await BookModel.findOne({ where: { id, userId: req.user.id } });
+        const book = await BookModel.findOne({ where: { id: id, userId: userId } });
+        console.log("🚀 ~ deleteBook ~ book:", book)
 
-        if(!booksById) throw new Error ('books not found')
+        if (!book) {
+            return res.status(404).json({ message: 'Book not found or you are not authorized' });
+        }
 
-        const books = await booksById.destroy();
+        if (req.user.role !== 'admin') {
+            return res.status(403).json({ message: 'You are not authorized to delete books.' });
+        }
         
-        res.status(200).json({
-            message: 'Delete books successful',
-            data: books
-        });
-    } catch (error) {
-        next(error)
-    }
-}
-
-const bookByTitle = async (req, res, next) => {
-    try {
-        const { title } = req.params;   
-
-        const books = await BookModel.findAll({ where: { title: title } });
+        await book.destroy();
 
         res.status(200).json({
-            message: 'Get books by title successful',
-            data: books
+            message: 'Delete book successful',
+            data: book
         });
     } catch (error) {
-        next(error)
+        next(error);
     }
 }
-
 
 
 module.exports = {
@@ -128,5 +144,5 @@ module.exports = {
     createBook,
     updateBook,
     deleteBook,
-    bookByTitle
+   
 }
