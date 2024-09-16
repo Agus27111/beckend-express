@@ -4,7 +4,7 @@ const { Op } = require('sequelize');
 
 const getAllBooks = async (req, res, next) => {
     try {
-        const {keywords = ''} = req.query;
+        const {keywords = '', categoryId = ''} = req.query;
        
         let condition = {
             userId: req.user.id
@@ -18,11 +18,19 @@ const getAllBooks = async (req, res, next) => {
                 }
             }
         }
+
+        if(categoryId !== '') {
+            condition = {
+                ...condition,
+                categoryId
+            }
+        }
         
         const books = await BookModel.findAll({where: condition, include: {
             model: CategoryModel,
             as: 'category',
         } });
+        
         res.status(201).json({
             message: 'Get books successful',
             data: books
@@ -143,6 +151,5 @@ module.exports = {
     getAllBooks,
     createBook,
     updateBook,
-    deleteBook,
-   
+    deleteBook
 }

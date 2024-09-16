@@ -12,6 +12,8 @@ const userRouter = require('./src/app/users/router')
 const categoriesRouter = require('./src/app/categories/router')
 const booksRouter = require('./src/app/books/router')
 const uploadsRouter = require('./src/app/uploads/router')
+const checkoutRouter = require('./src/app/checkout/router')
+const transactionRouter = require('./src/app/transactions/router')
 
 const errorHandler = require('./src/middleware/errorHandler')
 
@@ -31,6 +33,8 @@ app.use(url, userRouter)
 app.use(url, categoriesRouter)
 app.use(url, booksRouter)
 app.use(url, uploadsRouter)
+app.use(url, checkoutRouter)
+app.use(url, transactionRouter)
 
 //handle Error
 app.use(errorHandler)
